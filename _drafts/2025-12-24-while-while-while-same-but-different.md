@@ -57,8 +57,8 @@ And so I went through this train of thought.
 3. The input redirection operator `<` sends a file to the stdin of a command
 4. `while read x < file` does all the above
 
-Except it didn't. The loop was executed repeatedly on the same line. So started my thoughts on
-all the forms of `while`.
+Except it didn't. The loop was executed repeatedly on the same line. And so starts my rambling
+blog post on all the forms of `while`.
 
 # while forever
 
@@ -68,6 +68,58 @@ while : ; do
 done
 ```
 
+`while` executes the command after it (up till the line break, or `;`) until the
+command exits with a failure (exit code > 0). As long as the exit code is 0, the
+body of the loop is also executed.
+
+`:` is a shell built-in that always exits with 0: a <abbr title="no operation">noop</abbr>
+command. Using `true` would have the same effect.
+
+<aside class="weird-aside">
+    <span class="l1">
+        Conversely,
+    </span>
+    <pre class="language-shell highlighter-rouge highlight">
+        <code>
+            while false ; do
+                ...
+            done
+        </code>
+    </pre>
+    <span class="or">
+        or
+    </span>
+    <pre class="language-shell highlighter-rouge highlight">
+        <code>
+        while ! : ; do
+            ...
+        done
+        </code>
+    </pre>
+    <span class="l3">
+        would never run.
+    </span>
+</aside>
+
+
+<style>
+.weird-aside {
+    display: grid;
+    align-items: center;
+    gap: 5px;
+    grid-template-columns: auto 3em auto;
+    grid-template-areas:
+        "l1 l1 l1"
+        "code1 or code2"
+        "l3 l3 l3";
+}
+.weird-aside pre {
+    margin: 0px;
+}
+.l1 { grid-area: l1; }
+.l3 { grid-area: l3; }
+.or { grid-area: or; justify-self: center; }
+</style>
 <!--
 - vim: spell spelllang=en
 -->
